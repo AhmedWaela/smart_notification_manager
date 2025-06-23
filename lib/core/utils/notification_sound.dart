@@ -6,8 +6,7 @@ class NotificationSoundFile extends ConfigFile {
   NotificationSoundFile._() : super(_resolvePath());
   static final NotificationSoundFile _instance = NotificationSoundFile._();
   factory NotificationSoundFile() => _instance;
-
-  /// Resolves the path to the NotificationSound.kt file dynamically.
+  
   static String _resolvePath() {
     final String content = PubspecFile().content;
     final dynamic doc = loadYaml(content);

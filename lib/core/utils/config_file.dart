@@ -6,8 +6,19 @@ abstract class ConfigFile {
   late String content;
   ConfigFile(String path) {
     file = File(path);
-    lines = file.readAsLinesSync();
-    content = file.readAsStringSync();
+    if (isNotExist) {
+      file.createSync(recursive: true);
+    }
+    if (!isNotExist) {
+      lines = file.readAsLinesSync();
+      content = file.readAsStringSync();
+    }
   }
   bool get isNotExist => !file.existsSync();
+
+  void delete() {
+    if (!isNotExist) {
+      file.deleteSync(recursive: true);
+    }
+  }
 }

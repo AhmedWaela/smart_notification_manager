@@ -43,4 +43,17 @@ class MainActivity : FlutterActivity() {
 ''';
     return updatedContent;
   }
+
+  static String getDefaultContent() {
+    final String content = PubspecFile().content;
+    final dynamic doc = loadYaml(content);
+    final String? name = doc["name"];
+    return '''package com.example.$name
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity: FlutterActivity() {
+}
+''';
+  }
 }

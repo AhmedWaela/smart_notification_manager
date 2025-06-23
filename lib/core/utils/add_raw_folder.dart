@@ -1,22 +1,22 @@
 import 'dart:io';
 
 class RawFolder {
-  static final Directory _folder = Directory("android/app/src/main/res/raw");
+  static final Directory folder = Directory("android/app/src/main/res/raw");
   static late File originalSound;
   static void addSoundFile(String sound) {
     originalSound = File(sound);
-    if (!RawFolder._folder.existsSync()) {
-      RawFolder._folder.createSync(recursive: true);
+    if (!RawFolder.folder.existsSync()) {
+      RawFolder.folder.createSync(recursive: true);
     }
 
-    final filesInFolder = RawFolder._folder.listSync();
+    final filesInFolder = RawFolder.folder.listSync();
     for (var file in filesInFolder) {
       if (file is File && _isSoundFile(file)) {
         file.deleteSync();
       }
     }
 
-    final destinationPath = "${RawFolder._folder.path}/${originalSound.uri.pathSegments.last}";
+    final destinationPath = "${RawFolder.folder.path}/${originalSound.uri.pathSegments.last}";
     originalSound.copySync(destinationPath);
   }
 
@@ -42,7 +42,7 @@ class RawFolder {
     tools:keep="@raw/${originalSound.uri.pathSegments.last.split(".").first}"
     tools:discard="@layout/unused_layout" />''';
 
-    final keepFilePath = '${_folder.path}/keep.xml';
+    final keepFilePath = '${folder.path}/keep.xml';
     File keepFile = File(keepFilePath);
     if (!keepFile.existsSync()) {
       keepFile.createSync(recursive: true);

@@ -7,14 +7,15 @@ void createProguardFile() {
     '-keep class **.R',
     '-keep class **.R\$* { <fields>; }',
   ];
+  if (ProguardFile().isNotExist) {
+    ProguardFile().file.createSync(recursive: true);
+  }
 
   final bool isProguardContentAdded = lines[0].existsInLines(
     ProguardFile().lines,
   );
 
-  if (ProguardFile().isNotExist) {
-    ProguardFile().file.createSync(recursive: true);
-  }
+  ProguardFile().lines.insert(0, lines.join("\n"));
 
   if (!isProguardContentAdded) {
     ProguardFile().file.writeAsStringSync(ProguardFile().lines.join('\n'));
