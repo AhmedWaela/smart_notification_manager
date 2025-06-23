@@ -1,7 +1,7 @@
 import 'package:smart_notification_manager/core/utils/settings_gradle_file.dart';
 
 void checkAndUpdateGradleVersion() {
-  if (!SettingsGradleFile().isNotExist) {
+  if (SettingsGradleFile().isNotExist) {
     print("File settings.gradle.kts does not exist.");
     return;
   }
