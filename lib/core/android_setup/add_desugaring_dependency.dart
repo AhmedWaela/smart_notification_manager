@@ -1,25 +1,23 @@
+import 'package:smart_notification_manager/core/utils/constants.dart';
 import 'package:smart_notification_manager/core/utils/gradle_file.dart';
 import 'package:smart_notification_manager/core/utils/line_helper.dart';
 import 'package:smart_notification_manager/core/utils/line_index_helper.dart';
 
 void addCoreLibraryDesugaringDependency() {
-  final String dependency =
-      'coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")';
-  final GradleFile gradleFile = GradleFile();
-  final List<String> lines = gradleFile.lines;
-  final int dependencyLineNumber = 'dependencies'.getLineIndexIn(lines);
-  final RegExp regExp = RegExp(r'dependencies\s*{([^}]*)}');
+  final int line = Constants.dependencies.getLineIndexIn(GradleFile().lines);
 
-  if (dependencyLineNumber.isLineNotExist()) {
-    lines.add("dependencies {");
-    lines.add(dependency.padLeft(dependency.length + 4));
-    lines.add("}");
-    gradleFile.file.writeAsStringSync(lines.join("\n"));
+  final String dependency = 'coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")';
+  if (line.isLineNotExist()) {
+    GradleFile().lines.add("dependencies {");
+    GradleFile().lines.add(dependency.padLeft(dependency.length + 4));
+    GradleFile().lines.add("}");
+    final String content = GradleFile().lines.join("\n");
+    GradleFile().file.writeAsStringSync(content);
   } else {
-    String content = gradleFile.content;
-
-    if (regExp.hasMatch(content)) {
-      content = content.replaceAllMapped(regExp, (Match match) {
+    String content = GradleFile().content;
+    final RegExp dependenciesExp = RegExp(r'dependencies\s*{([^}]*)}');
+    if (dependenciesExp.hasMatch(content)) {
+      content = content.replaceAllMapped(dependenciesExp, (Match match) {
         String existingDependencies = match.group(1)!.trim();
 
         if (existingDependencies.isEmpty) {
@@ -33,7 +31,7 @@ void addCoreLibraryDesugaringDependency() {
         return match.group(0)!;
       });
 
-      gradleFile.file.writeAsStringSync(content);
+      GradleFile().file.writeAsStringSync(content);
     }
   }
 }

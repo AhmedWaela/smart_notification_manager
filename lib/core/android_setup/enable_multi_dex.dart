@@ -1,19 +1,22 @@
 import 'dart:io';
+import 'package:smart_notification_manager/core/utils/constants.dart';
 import 'package:smart_notification_manager/core/utils/gradle_file.dart';
 import 'package:smart_notification_manager/core/utils/line_helper.dart';
 import 'package:smart_notification_manager/core/utils/line_index_helper.dart';
 
 void enableMultiDex() {
-  final int lineNumber = "defaultConfig".getLineIndexIn(GradleFile().lines);
+  final int line = Constants.defaultConfig.getLineIndexIn(GradleFile().lines);
 
-  if (lineNumber.isLineNotExist()) {
+  if (line.isLineNotExist()) {
     print("Error: Could not find the defaultConfig section.");
     exit(0);
   }
 
-  final bool isMultiDexEnabled = "multiDexEnabled".existsInLines(GradleFile().lines);
+  final bool isMultiDexEnabled = Constants.multiDexEnabled.existsInLines(
+    GradleFile().lines,
+  );
   final String enableMultiDexLine = "multiDexEnabled = true";
-  final int firstLineInDefaultConfigScope = lineNumber + 1;
+  final int firstLineInDefaultConfigScope = line + 1;
   final int linePadding = enableMultiDexLine.length + 8;
   final String formattedLine = enableMultiDexLine.padLeft(linePadding);
   if (!isMultiDexEnabled) {
@@ -22,3 +25,5 @@ void enableMultiDex() {
     GradleFile().file.writeAsStringSync(updatedMultiDexContent);
   }
 }
+
+

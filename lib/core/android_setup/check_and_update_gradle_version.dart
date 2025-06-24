@@ -1,14 +1,10 @@
 import 'package:smart_notification_manager/core/utils/settings_gradle_file.dart';
 
 void checkAndUpdateGradleVersion() {
-  if (SettingsGradleFile().isNotExist) {
-    print("File settings.gradle.kts does not exist.");
-    return;
-  }
   final RegExp versionRegex = RegExp(
     r'id\("com\.android\.application"\)\s+version\s+"([\d.]+)"',
   );
-
+  
   for (int i = 0; i < SettingsGradleFile().lines.length; i++) {
     final Match? match = versionRegex.firstMatch(SettingsGradleFile().lines[i]);
     if (match != null) {
@@ -38,7 +34,6 @@ void checkAndUpdateGradleVersion() {
       break;
     }
   }
-  SettingsGradleFile().file.writeAsStringSync(
-    SettingsGradleFile().lines.join('\n'),
-  );
+  final String content = SettingsGradleFile().lines.join('\n');
+  SettingsGradleFile().file.writeAsStringSync(content);
 }
