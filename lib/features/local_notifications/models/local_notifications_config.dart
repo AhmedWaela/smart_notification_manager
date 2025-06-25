@@ -2,6 +2,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:smart_notification_manager/enums/enums.dart';
 
 class LocalNotificationConfig {
+  final Function(NotificationResponse details)? onBackgroundTap;
+  final Function(NotificationResponse details)? onForegroundTap;
   final Set<TargetPlatform> targetPlatforms;
   final String androidIconName;
   final String defaultActionName;
@@ -46,5 +48,7 @@ class LocalNotificationConfig {
     this.appUserModelId = "",
     this.guid = "",
     this.iconPath,
+    this.onBackgroundTap,
+    this.onForegroundTap
   });
 }

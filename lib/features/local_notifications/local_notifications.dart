@@ -20,13 +20,29 @@ abstract class NotificationSetup {
 class LocalNotificationSetup implements NotificationSetup {
   const LocalNotificationSetup._();
   static final _plugin = FlutterLocalNotificationsPlugin();
+  static Function(NotificationResponse details)? _onBackgroundTap;
+  static Function(NotificationResponse details)? _onForegroundTap;
   @override
   Future<void> setup({
     LocalNotificationConfig config = const LocalNotificationConfig(),
   }) async {
+    _onBackgroundTap = config.onBackgroundTap;
+    _onForegroundTap = config.onForegroundTap;
     await _plugin.initialize(
       buildInitalizationSettings(config: config),
+      onDidReceiveBackgroundNotificationResponse: onDidReceiveBackgroundNotificationResponse,
+      onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
     );
+  }
+
+  static void onDidReceiveBackgroundNotificationResponse(
+    NotificationResponse details,
+  ) {
+    _onBackgroundTap?.call(details);
+  }
+
+  static void onDidReceiveNotificationResponse(NotificationResponse details) {
+     _onForegroundTap?.call(details);
   }
 }
 
